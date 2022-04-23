@@ -27,13 +27,7 @@
         <!-- sidebar menu area end -->
 
         <!-- main content area start -->
-        <div class="main-content">
-
-            @include('backend.layouts.partials.header')
-            <div class="main-content-inner">
-              @yield('content')
-            </div>
-        </div>
+        @yield('content')
         <!-- main content area end -->
 
         <!-- footer area start-->

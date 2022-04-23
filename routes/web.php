@@ -25,5 +25,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
-    Route::resource('roles', RoleController::class);
+    Route::resource('roles', RoleController::class, ['names'=>'admin.roles']);
 });
