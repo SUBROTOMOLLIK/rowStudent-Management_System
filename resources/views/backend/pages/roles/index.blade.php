@@ -38,6 +38,9 @@
         <div class="row">
             <!-- data table start -->
             <div class="col-12 mt-5">
+                <!--Error and Success Message Show End-->
+                @include('backend.layouts.partials.success')
+                <!--Error and Success Message Show Start-->
                 <div class="card">
                     <div class="card-body">
                         <h4 class="header-title">All Role</h4>
@@ -47,6 +50,7 @@
                                     <tr>
                                         <th>SI</th>
                                         <th>Role</th>
+                                        <th>Permissions</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -57,9 +61,24 @@
                                             <td>{{$loop->index+1}}</td>
                                             <td>{{$role->name}}</td>
                                             <td>
-                                                <a href="" role="button" class="btn btn-primary btn-sm">view</a>
-                                                <a href="" role="button" class="btn btn-success btn-sm">edit</a>
-                                                <a href="" role="button" class="btn btn-danger btn-sm">delete</a>
+                                                @foreach ($role->permissions as $permission)
+                                                    <span class="badge badge-info p-1 mr-1">{{$permission->name}}</span>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                <a href="{{route('admin.roles.create')}}" role="button" class="btn btn-info btn-sm">create</a>
+                                                <a href="{{route('admin.roles.edit', $role->id)}}" role="button" class="btn btn-primary btn-sm">edit</a>
+
+                                                <a class="btn btn-danger btn-sm" href="{{ route('admin.roles.destroy',$role->id) }}"
+                                                onclick="event.preventDefault();
+                                                document.getElementById('formDelete').submit();">
+                                                 {{ __('delete') }}
+                                             </a>
+
+                                             <form id="formDelete" action="{{route('admin.roles.destroy',$role->id)}}" method="POST" class="d-none">
+                                                @method('delete')
+                                                 @csrf
+                                             </form>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Create Role - Admin Panel
+    Edit Role - Admin Panel
 @endsection
 @section('content')
 <div class="main-content">
@@ -16,7 +16,7 @@
                     <h4 class="page-title pull-left">Dashboard</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="index.html">Home</a></li>
-                        <li><span>create role</span></li>
+                        <li><span>edit role</span></li>
                     </ul>
                 </div>
             </div>
@@ -44,12 +44,13 @@
             <!--Error and Success Message Show Start-->
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Role Create</h4>
-                    <form method="post" action="{{route('admin.roles.store')}}">
+                    <h4 class="header-title">Role Edit</h4>
+                    <form method="post" action="{{route('admin.roles.update', $role->id)}}">
+                        @method('PUT')
                         @csrf
                         <div class="form-group">
                             <label for="exampleInputEmail1">Role Name</label>
-                            <input type="text" class="form-control" name="name" placeholder="Enter Role Name">
+                            <input type="text" class="form-control" name="name" value="{{$role->name}}">
                         </div>
 
                         <div class="form-group">
@@ -57,7 +58,7 @@
                             <hr>
                             @foreach ($permissions as $permission)
                             <div class="form-check py-2">
-                                <input type="checkbox" class="form-check-input" name="permissions[]" id="permissionCheck{{$permission->id}}" value="{{$permission->name}}">
+                                <input type="checkbox" class="form-check-input" name="permissions[]" id="permissionCheck{{$permission->id}}" value="{{$permission->name}}" {{$role->hasPermissionTo($permission->name)?'checked':''}}>
                                 <label class="form-check-label" for="permissionCheck{{$permission->id}}">{{$permission->name}}</label>
                             </div>
                             @endforeach

@@ -39,7 +39,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => "required|string|uniqe:roles"
+            'name' => "required|max:100|unique:roles"
         ]);
 
         $role = Role::create(['name' => $request->name]);
@@ -49,7 +49,7 @@ class RoleController extends Controller
             $role->syncPermissions($permissions);
         }
 
-        return back();
+        return back()->with('success', 'Role Created Successful');
     }
 
     /**
@@ -71,7 +71,9 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $permissions = Permission::all();
+        $role = Role::find($id);
+        return view('backend.pages.roles.edit', compact('role','permissions'));
     }
 
     /**
@@ -83,7 +85,18 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:100|unique:roles,nams'. $id
+        ]);
+
+        $role = Role::find($id);
+        $permissions = $request->input('permissions');
+
+        if (!empty($permissions)) {
+            $role->syncPermissions($permissions);
+        }
+
+        return back()->with('success', 'Role Updated Successful');
     }
 
     /**
@@ -94,6 +107,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role = Role::find($id);
+        if(!is_null($role)){
+           $role->delete();
+        }
+        return back()->with('success', 'Role Deleted Successful');
     }
 }
